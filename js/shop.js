@@ -14,7 +14,6 @@ const products = [
         image: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?auto=format&fit=crop&w=800&q=85"
     },
 
-
     {
         id: 2,
         name: "Vitamin C Serum",
@@ -26,7 +25,6 @@ const products = [
         badge: "NEW",
         image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=85"
     },
-
 
     {
         id: 3,
@@ -40,7 +38,6 @@ const products = [
         image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=800&q=85"
     },
 
-
     {
         id: 4,
         name: "Daily Sunscreen",
@@ -52,7 +49,6 @@ const products = [
         badge: "",
         image: "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=800&q=85"
     },
-
 
     {
         id: 5,
@@ -66,7 +62,6 @@ const products = [
         image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=800&q=85"
     },
 
-
     {
         id: 6,
         name: "Hyaluronic Serum",
@@ -79,7 +74,6 @@ const products = [
         image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=800&q=85"
     },
 
-
     {
         id: 7,
         name: "Daily Moisture Cream",
@@ -91,7 +85,6 @@ const products = [
         badge: "",
         image: "https://images.unsplash.com/photo-1601612628452-9e99ced43524?auto=format&fit=crop&w=800&q=85"
     },
-
 
     {
         id: 8,
@@ -141,60 +134,82 @@ let currentCategory = "all";
 
 
 
-let cart =
-    JSON.parse(
+function getCart() {
+
+    return JSON.parse(
         localStorage.getItem("lumeaCart")
     ) || [];
+
+}
+
+
+
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+        "lumeaCart",
+        JSON.stringify(cart)
+    );
+
+}
+
 
 
 function updateCartCount() {
 
-    const total = cart.reduce(
-        (sum, item) =>
-            sum + item.quantity,
-        0
-    );
+    const cart =
+        getCart();
+
+
+    const total =
+        cart.reduce(
+            (sum, item) =>
+                sum + Number(item.quantity),
+            0
+        );
 
 
     if (cartCount) {
 
-        cartCount.textContent = total;
+        cartCount.textContent =
+            total;
 
     }
 
 }
 
 
-updateCartCount();
-
 
 
 function displayProducts() {
 
     const searchTerm =
-        searchInput.value
-            .toLowerCase()
-            .trim();
+        searchInput
+            ? searchInput.value
+                .toLowerCase()
+                .trim()
+            : "";
 
 
     const filteredProducts =
         products.filter(product => {
 
 
-            const matchesCategory =
+            const categoryMatch =
                 currentCategory === "all" ||
                 product.category === currentCategory;
 
 
-            const matchesSearch =
+            const searchMatch =
                 product.name
                     .toLowerCase()
                     .includes(searchTerm);
 
 
             return (
-                matchesCategory &&
-                matchesSearch
+                categoryMatch &&
+                searchMatch
             );
 
         });
@@ -297,7 +312,7 @@ function displayProducts() {
     });
 
 
-    /* Add button listeners */
+    /* Add to cart listeners */
 
     document
         .querySelectorAll(".quick-add")
@@ -313,6 +328,7 @@ function displayProducts() {
 }
 
 
+
 function addToCart(event) {
 
     const productId =
@@ -323,19 +339,43 @@ function addToCart(event) {
 
     const product =
         products.find(
-            item => item.id === productId
+            item =>
+                item.id === productId
         );
+
+
+    if (!product) {
+
+        console.error(
+            "Product not found"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       IMPORTANT:
+       Read the latest cart
+       before adding the product.
+    */
+
+    const cart =
+        getCart();
 
 
     const existing =
         cart.find(
-            item => item.id === productId
+            item =>
+                Number(item.id) === productId
         );
 
 
     if (existing) {
 
-        existing.quantity += 1;
+        existing.quantity =
+            Number(existing.quantity) + 1;
 
     } else {
 
@@ -354,11 +394,12 @@ function addToCart(event) {
     }
 
 
-    localStorage.setItem(
-        "lumeaCart",
-        JSON.stringify(cart)
-    );
+    /* Save */
 
+    saveCart(cart);
+
+
+    /* Update counter */
 
     updateCartCount();
 
@@ -396,21 +437,24 @@ categoryButtons.forEach(button => {
 
     button.addEventListener(
         "click",
-        () => {
-
+        function () {
 
             categoryButtons.forEach(btn => {
 
-                btn.classList.remove("active");
+                btn.classList.remove(
+                    "active"
+                );
 
             });
 
 
-            button.classList.add("active");
+            this.classList.add(
+                "active"
+            );
 
 
             currentCategory =
-                button.dataset.category;
+                this.dataset.category;
 
 
             displayProducts();
@@ -434,11 +478,12 @@ if (searchInput) {
 
 
 
+
 if (cartButton) {
 
     cartButton.addEventListener(
         "click",
-        () => {
+        function () {
 
             window.location.href =
                 "cart.html";
@@ -450,11 +495,12 @@ if (cartButton) {
 
 
 
-if (menuBtn) {
+
+if (menuBtn && navLinks) {
 
     menuBtn.addEventListener(
         "click",
-        () => {
+        function () {
 
             const isOpen =
                 navLinks.classList.toggle(
@@ -473,6 +519,8 @@ if (menuBtn) {
 }
 
 
+
+updateCartCount();
 
 displayProducts();
 
