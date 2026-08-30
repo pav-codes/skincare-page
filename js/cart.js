@@ -1,9 +1,45 @@
 
 
-let cart =
-    JSON.parse(
-        localStorage.getItem("lumeaCart")
-    ) || [];
+const CART_KEY = "lumeaCart";
+
+
+
+function getCart() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(CART_KEY)
+        ) || [];
+
+    } catch (error) {
+
+        console.error(
+            "Could not read cart:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+        CART_KEY,
+        JSON.stringify(cart)
+    );
+
+}
+
+
+let cart = getCart();
+
+
 
 
 const cartItems =
@@ -28,19 +64,45 @@ const checkoutBtn =
     document.getElementById("checkoutBtn");
 
 
-
 function updateCartCount() {
 
-    const totalItems =
-        cart.reduce(
-            (sum, item) =>
-                sum + item.quantity,
-            0
-        );
+    const count = cart.reduce(
+        (total, item) => {
+            return total + Number(item.quantity);
+        },
+        0
+    );
+
+    if (cartCount) {
+
+        cartCount.textContent = count;
+
+    }
+
+}
 
 
-    cartCount.textContent =
-        totalItems;
+
+
+function getProductImage(name) {
+
+    const images = {
+
+        "Hydrating Cleanser":
+            "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?auto=format&fit=crop&w=800&q=85",
+
+        "Vitamin C Serum":
+            "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=85",
+
+        "Barrier Repair Cream":
+            "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=800&q=85",
+
+        "Daily Sunscreen":
+            "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=800&q=85"
+
+    };
+
+    return images[name] || images["Daily Sunscreen"];
 
 }
 
@@ -52,25 +114,21 @@ function displayCart() {
     cartItems.innerHTML = "";
 
 
-    /* Empty cart */
+    /* EMPTY CART */
 
     if (cart.length === 0) {
 
         emptyCart.classList.add("show");
 
-        subtotalElement.textContent =
-            "₹0";
+        subtotalElement.textContent = "₹0";
 
-        shippingElement.textContent =
-            "—";
+        shippingElement.textContent = "—";
 
-        totalElement.textContent =
-            "₹0";
+        totalElement.textContent = "₹0";
 
         checkoutBtn.disabled = true;
 
-        checkoutBtn.style.opacity =
-            "0.5";
+        checkoutBtn.style.opacity = "0.5";
 
         updateCartCount();
 
@@ -89,16 +147,21 @@ function displayCart() {
     let subtotal = 0;
 
 
+    /* DISPLAY EACH ITEM */
+
     cart.forEach(item => {
 
-        subtotal +=
-            item.price *
-            item.quantity;
+        const quantity =
+            Number(item.quantity);
+
+        const price =
+            Number(item.price);
+
+        subtotal += price * quantity;
 
 
         const cartItem =
             document.createElement("div");
-
 
         cartItem.className =
             "cart-item";
@@ -126,11 +189,8 @@ function displayCart() {
                     LUMÉA skincare
                 </p>
 
-
                 <div class="cart-price">
-
-                    ₹${item.price}
-
+                    ₹${price}
                 </div>
 
 
@@ -142,11 +202,9 @@ function displayCart() {
                         −
                     </button>
 
-
                     <span>
-                        ${item.quantity}
+                        ${quantity}
                     </span>
-
 
                     <button
                         onclick="changeQuantity(${item.id}, 1)"
@@ -178,20 +236,21 @@ function displayCart() {
 
     let shipping = 0;
 
+
     if (subtotal > 0 && subtotal < 999) {
 
         shipping = 79;
 
-        shippingElement.textContent =
-            "₹79";
+        shippingElement.textContent = "₹79";
 
     } else {
 
-        shippingElement.textContent =
-            "FREE";
+        shippingElement.textContent = "FREE";
 
     }
 
+
+    /* TOTAL */
 
     const total =
         subtotal + shipping;
@@ -211,94 +270,41 @@ function displayCart() {
 
 
 
-function getProductImage(name) {
-
-    const images = {
-
-        "Hydrating Cleanser":
-            "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?auto=format&fit=crop&w=800&q=85",
-
-        "Vitamin C Serum":
-            "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=85",
-
-        "Barrier Repair Cream":
-            "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=800&q=85",
-
-        "Daily Sunscreen":
-            "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=800&q=85"
-
-    };
-
-
-    return (
-        images[name] ||
-        "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=85"
-    );
-
-}
-
-
-
-
 function changeQuantity(
     productId,
     amount
 ) {
 
-    const product =
+    const item =
         cart.find(
-            item => item.id === productId
+            product =>
+                product.id === productId
         );
 
 
-    if (!product) {
+    if (!item) {
+
         return;
+
     }
 
 
-    product.quantity += amount;
+    item.quantity =
+        Number(item.quantity) + amount;
 
 
-    if (product.quantity <= 0) {
+    if (item.quantity <= 0) {
 
         cart =
             cart.filter(
-                item =>
-                    item.id !== productId
+                product =>
+                    product.id !== productId
             );
 
     }
 
 
-    saveCart();
-
-}
-
-
-
-function removeItem(productId) {
-
-    cart =
-        cart.filter(
-            item =>
-                item.id !== productId
-        );
-
-
-    saveCart();
-
-}
-
-
-
-
-function saveCart() {
-
-    localStorage.setItem(
-        "lumeaCart",
-        JSON.stringify(cart)
-    );
-
+    saveCart(cart);
 
     displayCart();
 
@@ -306,19 +312,52 @@ function saveCart() {
 
 
 
-checkoutBtn.addEventListener(
-    "click",
-    () => {
 
-        alert(
-            "Checkout demo — payment integration is not required for this project."
+function removeItem(productId) {
+
+    cart =
+        cart.filter(
+            product =>
+                product.id !== productId
         );
 
-    }
-);
+
+    saveCart(cart);
+
+    displayCart();
+
+}
+
+
+if (checkoutBtn) {
+
+    checkoutBtn.addEventListener(
+        "click",
+        function () {
+
+            if (cart.length === 0) {
+
+                alert(
+                    "Your cart is empty."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Checkout demo — no real payment is required for this project."
+            );
+
+        }
+    );
+
+}
 
 
 
 
 displayCart();
-```
+updateCartCount();
+
