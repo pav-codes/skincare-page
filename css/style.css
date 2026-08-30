@@ -1,7 +1,4 @@
-```css
-/* =========================================
-   LUMÉA — GLOBAL STYLES
-========================================= */
+
 
 :root {
     --cream: #f8f5ef;
@@ -19,9 +16,6 @@
 }
 
 
-/* =========================================
-   RESET
-========================================= */
 
 * {
     margin: 0;
@@ -56,10 +50,6 @@ input {
 }
 
 
-/* =========================================
-   ANNOUNCEMENT
-========================================= */
-
 .announcement {
     background: var(--dark);
     color: var(--white);
@@ -70,10 +60,6 @@ input {
     text-transform: uppercase;
 }
 
-
-/* =========================================
-   NAVBAR
-========================================= */
 
 .navbar {
     position: sticky;
@@ -191,9 +177,6 @@ input {
 }
 
 
-/* =========================================
-   HERO
-========================================= */
 
 .hero {
     width: min(1200px, 90%);
@@ -291,9 +274,6 @@ h2 em {
 }
 
 
-/* =========================================
-   HERO IMAGE
-========================================= */
 
 .hero-image {
     position: relative;
@@ -343,9 +323,6 @@ h2 em {
 }
 
 
-/* =========================================
-   INTRO
-========================================= */
 
 .intro {
     padding: 130px max(5%, calc((100vw - 1200px) / 2));
@@ -412,9 +389,6 @@ h2 em {
 }
 
 
-/* =========================================
-   BENEFITS
-========================================= */
 
 .benefits {
     width: min(1200px, 90%);
@@ -458,9 +432,7 @@ h2 em {
 }
 
 
-/* =========================================
-   PRODUCTS
-========================================= */
+
 
 .products-section {
     padding: 120px max(5%, calc((100vw - 1200px) / 2));
@@ -597,9 +569,6 @@ h2 em {
 }
 
 
-/* =========================================
-   STORY
-========================================= */
 
 .story-section {
     display: grid;
@@ -645,10 +614,6 @@ h2 em {
     margin-top: 20px;
 }
 
-
-/* =========================================
-   BESTSELLERS
-========================================= */
 
 .bestsellers {
     padding: 130px max(5%, calc((100vw - 1200px) / 2));
@@ -722,9 +687,6 @@ h2 em {
 }
 
 
-/* =========================================
-   TESTIMONIAL
-========================================= */
 
 .testimonial {
     padding: 130px 20px;
@@ -768,9 +730,6 @@ blockquote {
 }
 
 
-/* =========================================
-   NEWSLETTER
-========================================= */
 
 .newsletter {
     padding: 130px 20px;
@@ -830,9 +789,6 @@ blockquote {
 }
 
 
-/* =========================================
-   FOOTER
-========================================= */
 
 .footer {
     padding: 80px max(5%, calc((100vw - 1200px) / 2)) 25px;
@@ -896,9 +852,6 @@ blockquote {
 }
 
 
-/* =========================================
-   RESPONSIVE — TABLET
-========================================= */
 
 @media (max-width: 900px) {
 
@@ -935,9 +888,6 @@ blockquote {
 }
 
 
-/* =========================================
-   RESPONSIVE — MOBILE
-========================================= */
 
 @media (max-width: 650px) {
 
@@ -994,7 +944,6 @@ blockquote {
     }
 
 
-    /* HERO */
 
     .hero {
         width: 90%;
@@ -1043,7 +992,6 @@ blockquote {
     }
 
 
-    /* INTRO */
 
     .intro {
         padding: 90px 5%;
@@ -1063,15 +1011,11 @@ blockquote {
     }
 
 
-    /* BENEFITS */
-
     .benefits {
         width: 90%;
         padding: 65px 0;
     }
 
-
-    /* PRODUCTS */
 
     .products-section {
         padding: 80px 5%;
@@ -1105,9 +1049,6 @@ blockquote {
         font-size: 16px;
     }
 
-
-    /* STORY */
-
     .story-section {
         display: flex;
         flex-direction: column;
@@ -1121,8 +1062,6 @@ blockquote {
         padding: 80px 8%;
     }
 
-
-    /* BESTSELLERS */
 
     .bestsellers {
         padding: 90px 5%;
@@ -1142,8 +1081,6 @@ blockquote {
     }
 
 
-    /* TESTIMONIAL */
-
     .testimonial {
         padding: 90px 20px;
     }
@@ -1152,8 +1089,6 @@ blockquote {
         font-size: 32px;
     }
 
-
-    /* NEWSLETTER */
 
     .newsletter {
         padding: 90px 20px;
@@ -1177,9 +1112,6 @@ blockquote {
         border-radius: 30px;
     }
 
-
-    /* FOOTER */
-
     .footer {
         padding: 60px 5% 20px;
     }
@@ -1199,4 +1131,15 @@ blockquote {
     }
 
 }
-```
+.reveal {
+    opacity: 0;
+    transform: translateY(25px);
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
