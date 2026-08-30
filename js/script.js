@@ -1,12 +1,4 @@
-```javascript
-/* =========================================
-   LUMÉA — HOMEPAGE JAVASCRIPT
-========================================= */
 
-
-/* =========================================
-   MOBILE NAVIGATION
-========================================= */
 
 const menuBtn = document.getElementById("menuBtn");
 const navLinks = document.getElementById("navLinks");
@@ -27,7 +19,6 @@ if (menuBtn) {
 }
 
 
-/* Close mobile menu when clicking a link */
 
 document.querySelectorAll(".nav-links a").forEach(link => {
 
@@ -47,9 +38,6 @@ document.querySelectorAll(".nav-links a").forEach(link => {
 });
 
 
-/* =========================================
-   CART
-========================================= */
 
 let cart = JSON.parse(
     localStorage.getItem("lumeaCart")
@@ -76,9 +64,7 @@ function updateCartCount() {
 updateCartCount();
 
 
-/* =========================================
-   ADD TO CART
-========================================= */
+
 
 const addButtons = document.querySelectorAll(".quick-add");
 
@@ -153,9 +139,6 @@ addButtons.forEach(button => {
 });
 
 
-/* =========================================
-   NEWSLETTER FORM
-========================================= */
 
 const newsletterForm =
     document.getElementById("newsletterForm");
@@ -192,9 +175,7 @@ if (newsletterForm) {
 }
 
 
-/* =========================================
-   SCROLL REVEAL ANIMATION
-========================================= */
+
 
 const revealElements =
     document.querySelectorAll(
@@ -234,9 +215,6 @@ revealElements.forEach(element => {
 });
 
 
-/* =========================================
-   CART BUTTON
-========================================= */
 
 const cartButton =
     document.querySelector(".cart-btn");
@@ -252,4 +230,4 @@ if (cartButton) {
     });
 
 }
-```
+``
